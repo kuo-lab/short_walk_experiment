@@ -1,4 +1,5 @@
-
+%% Short walking experiment, Carlisle & Kuo
+%% Preliminary initialization
 subjects = 1:10;
 distances = 1:10;
 section = [1 3];
@@ -22,7 +23,11 @@ length_all_sub = {};
 freq_all_sub = {};
 rise_times_all_sub = zeros( length(subjects), 3, length(distances), length(section)*length(trials));
 speed_dist_fig = figure;
+%% Loop through subjects
+% load in all walking bouts, plot speed trajectory vs time, 
+% peak speed vs distance, and duration vs distance
 for isubject=subjects
+  fprintf(1, '\nLoading subject %d distances ', isubject);
   % this is where figures should get saved
   save_dir = ['results/subject' int2str(isubject) '/'];
   if ~exist('results', 'dir')
@@ -36,8 +41,9 @@ for isubject=subjects
   step_length_all_dist = {};
   step_freq_all_dist = {};
   
-
+% Loop through the different walking distances
   for idistance = distances
+    fprintf(1,'%d ', idistance);
     step_speed_all = {};
     step_speed_ff_all = {};
     step_length_all = {};
@@ -73,8 +79,6 @@ for isubject=subjects
         color1 = '#E63946';
         color2 = '#1D3557';
       end
-       
-      
 
       if FF1(end) > FF2(end) % check which foot fall is last
         ffend = FF1(end);
@@ -83,6 +87,7 @@ for isubject=subjects
       end
 
       % rotate the foot paths so that they align with the x-axis
+      % because IMUs do not know heading direction
       ang2 = find_avg_direction(walk_info2.P(FF1(1):ffend,1),walk_info2.P(FF1(1):ffend,2));
       Prot2 = rotateP(walk_info2.P(FF1(1):ffend,:),ang2,'z'); 
       P2 = Prot2(:,1); 
@@ -110,9 +115,9 @@ for isubject=subjects
         end
         halfp1 = P1(ff1(2:end-2))+0.5*diff(P1(ff1(2:end-1)));
         start_shift = mean(halfp1-P2(FF2(2:length(halfp1)+1)));
-        f = @(x)scale_and_shift(P1,P2,ff1,FF2,x);
-        x0 = [start_scale; start_shift];
-        [x,fval,exitflag,output] = fminunc(f,x0);
+        f = @(x)scale_and_shift(P1,P2,ff1,FF2,x); % the imus don't exactly match in distance traveled
+        x0 = [start_scale; start_shift]; % so find the best scaling between them
+        [x,fval,exitflag,output] = fminunc(f,x0); % to enable consistent step length measures
         P2_shift = (P2*x(1))+x(2);
         % save the x for later
         x_save(xcount,3) = 1; % whether or not optimization was used
@@ -323,7 +328,7 @@ if isempty(intersections)
    disp('something went wrong') 
 end
 
-       if(max(step_freq) > 2.5)
+       if(max(step_freq) > 2.5) % if unrealistic step frequency detected, show which subject, distance, etc.
            %plot_foot_position(P1,P2_shift,FF1,FF2,label1,label2,color1,color2,PERIOD);
            disp(isubject)
            disp(idistance)
@@ -370,17 +375,18 @@ end
       end % for itrial
     end % for isection
     
-  step_speed_all_dist{idistance} = step_speed_all;
-  step_ff_all_dist{idistance} = step_speed_ff_all;
-  step_length_all_dist{idistance} = step_length_all;
-  step_freq_all_dist{idistance} = step_freq_all;
-  end % for idistance
+    step_speed_all_dist{idistance} = step_speed_all;
+    step_ff_all_dist{idistance} = step_speed_ff_all;
+    step_length_all_dist{idistance} = step_length_all;
+    step_freq_all_dist{idistance} = step_freq_all;
+  end % loop for idistance
+  fprintf(1, '\n'); % end line for each distance
   %% plots for individual subjects
   if (length(distances) > 3)
   % speed profile using step speeds  
   step_speed_fig=figure('Renderer', 'painters', 'Position', [10 10 1200 600]);
   hold on
-  for i =1:length(distances)
+  for i =1:length(distances) % plot step speed vs time for all distances
     for j=1:length(step_speed_all_dist{distances(i)})
         plot(step_ff_all_dist{distances(i)}{j},step_speed_all_dist{distances(i)}{j},'Color',colors(i,:))
     end
@@ -423,6 +429,7 @@ end
   end
   saveas(gcf, strcat(save_dir,'speed-distance') , 'png');
   
+  % Duration vs distance
   figure
   this_duration = squeeze(walk_duration(isubject,:,:));
   plot(actual_dist(distances),this_duration(distances,:),'-o');
@@ -586,7 +593,7 @@ if length(subjects) == 10 && length(distances) == 10
         plot(actual_dist,squeeze(peak_speed(i,:,:)),'.','Color',colors(i,:))
       end
     
-    %% plot walk durations
+    %% plot walk durations for everyone together
     walk_duration_all=zeros(1,size(walk_duration,1)*size(walk_duration,2)*size(walk_duration,3));
     for i=1:size(walk_duration,1)
        tmp = reshape(walk_duration(i,:,:)/mean(walk_duration(i,10,:)),1,size(walk_duration,2)*size(walk_duration,3));
@@ -606,7 +613,7 @@ if length(subjects) == 10 && length(distances) == 10
     %flat_times = reshape(rise_times_reshape(2,:,:) - rise_times_reshape(1,:,:),1,800);
     %fall_times = reshape(rise_times_reshape(3,:,:) - rise_times_reshape(2,:,:),1,800);
  
-    figure
+    figure % walking duration vs distance
     %plot(actual_dist_all,walk_duration_all,'o')
     hold on
     fitfun = fittype( @(a,b,c,x) x/a+b*(1-exp(-x/c)) );

@@ -1,4 +1,6 @@
 function [mean_step_direction] = find_avg_direction(steps_x,steps_y)
+% find_avg_direction(steps_x, steps_y) determines the walking bout
+% direction, based on the covariance of the steps
 
 c = cov(steps_x,steps_y);
 [V,D] = eig(c);
