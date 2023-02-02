@@ -1,5 +1,6 @@
 function P = find_intersections(l1,l2,T_FF,A_FF)
-% find points of intersection in two lines
+%    find_intersections(l1, l2, T_FF, A_FF)
+% find points of intersection in two lines l1 and l2
 % A_FF is the distance threshold for intersection
 % intersections must be separated by at least T_FF
 

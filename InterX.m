@@ -41,6 +41,9 @@ function P = InterX(L1,varargin)
 %   Each factor of the 'C' arrays is essentially a matrix containing 
 %   the numerators of the signed distances between points of one curve
 %   and line segments of the other.
+%
+%  This file obtained from Matlab file exchange
+%  https://www.mathworks.com/matlabcentral/fileexchange/22441-curve-intersections
 
     %...Argument checks and assignment of L2
     error(nargchk(1,2,nargin));
