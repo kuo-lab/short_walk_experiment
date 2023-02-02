@@ -4,7 +4,7 @@ Used for making plots of walking speed from the short walk IMU experiment, where
 
 To use, run analyze_short_walks_new.m. Ignore optimization warnings
 
-This cannot be used for any generalized data without modification because there was a lot of manual intervention in finding the intersecting points in the position-time graph to set step speed and time. These interventions have been hard-coded for specific subjects and trials and would have to be removed in order to perform the same analysis on a new data set.
+The data analysis included significant manual intervention for identifying the intersecting points in the position-time graph to set step speed and time. These interventions have been hard-coded for specific subjects and trials and would have to be removed in order to perform the same analysis on a new data set. Otherwise, much of the analysis could be applied to other data for short walking bouts. 
 
 The m-file performs analysis and makes plots for each subject, and then
 produces a summary plot for all subjects. Each subject walked 10 distances (conditions),
@@ -27,3 +27,5 @@ optimization finds a local minimum. The warnings may safely be ignored,
 because poor scaling mainly causes the speeds to be jagged--the alternating
 speeds of the two feet will go up and down during steady walking.
 
+## Optimization model
+The code for the dynamic optimization model is in a [separate optimization repository](https://github.com/kuo-lab/simplelocomotionmodel). The code is in Julia and the entire modeling and optimization toolchain is available as open source.
