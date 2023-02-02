@@ -1,8 +1,10 @@
-# README #
+# README short_walk_experiment #
 
-Used for making plots of walking speed from the short walk IMU experiment, where people walked 10 different short distances. All data are stored in saved_walk_info. 
+## [Optimization of energy and time predicts dynamic speeds for human walking (Carlisle and Kuo 2022)](https://github.com/kuo-lab/simplelocomotionmodel)
 
-To use, run analyze_short_walks_new.m. Ignore optimization warnings
+This repository contains code for making plots of walking speed from the short walk IMU experiment, where people walked 10 different short distances. All data are stored in `saved_walk_info.mat`. 
+
+To use, run `analyze_short_walks_new.m`. Ignore optimization warnings
 
 The data analysis included significant manual intervention for identifying the intersecting points in the position-time graph to set step speed and time. These interventions have been hard-coded for specific subjects and trials and would have to be removed in order to perform the same analysis on a new data set. Otherwise, much of the analysis could be applied to other data for short walking bouts. 
 
@@ -29,3 +31,12 @@ speeds of the two feet will go up and down during steady walking.
 
 ## Optimization model
 The code for the dynamic optimization model is in a [separate optimization repository](https://github.com/kuo-lab/simplelocomotionmodel). The code is in Julia and the entire modeling and optimization toolchain is available as open source.
+
+# References
+<div id="refs" class="references csl-bib-body hanging-indent">
+
+<div id="ref-carlisle2022OptimizationEnergyTime" class="csl-entry">
+
+Carlisle, R. Elizabeth, and Arthur D. Kuo. 2022. “Optimization of Energy
+and Time Predicts Dynamic Speeds for Human Walking.” bioRxiv.
+<https://doi.org/10.1101/2022.07.15.500158>.
