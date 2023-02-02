@@ -2,9 +2,9 @@
 
 ## [Optimization of energy and time predicts dynamic speeds for human walking (Carlisle and Kuo 2022)](https://github.com/kuo-lab/simplelocomotionmodel)
 
-This repository contains code for making plots of walking speed from the short walk IMU experiment, where people walked 10 different short distances. All data are stored in `saved_walk_info.mat`. 
+This repository contains code for making plots of walking speed from the short walk IMU experiment, where people walked 10 different short distances. All data are stored in `saved_walk_info/new`. 
 
-To use, run `analyze_short_walks_new`. Ignore optimization warnings
+To use, run `analyze_short_walks_new.m`. Ignore optimization warnings
 
 The data analysis included significant manual intervention for identifying the intersecting points in the position-time graph to set step speed and time. These interventions have been hard-coded for specific subjects and trials and would have to be removed in order to perform the same analysis on a new data set. Otherwise, much of the analysis could be applied to other data for short walking bouts. 
 
